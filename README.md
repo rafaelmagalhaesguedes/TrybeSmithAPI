@@ -110,6 +110,10 @@ npm test
   O banco de dados do projeto segue a estrutura abaixo: <br/>
 
   <img src="images/diagram-der.png" height="200px" />
+  <br/>  
+  <strong>Correção:</strong>
+  Identificamos que na tabela `products`, ocorreu um equivoco na denominação da coluna `amount`. A nomenclatura correta é `price`. <br/>
+  <strong>Portanto, considere `price` ao desenvolver o projeto.</strong> <br/> 
 
 </details>
 
