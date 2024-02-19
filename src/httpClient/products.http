@@ -1,0 +1,10 @@
+###
+### Create a new product
+POST http://localhost:3001/products
+Content-Type: application/json
+
+{
+  "name": "Martelo do Chapolin Colorado",
+  "price": "1200 peças de ouro",
+  "userId": 1
+}
