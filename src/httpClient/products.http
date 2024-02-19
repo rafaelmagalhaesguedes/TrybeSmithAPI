@@ -8,3 +8,7 @@ Content-Type: application/json
   "price": "1200 peças de ouro",
   "userId": 1
 }
+
+###
+### Get all products
+GET http://localhost:3001/products
