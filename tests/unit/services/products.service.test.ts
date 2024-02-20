@@ -1,47 +1,73 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import { Product } from '../../../src/types/Product';
+import { Model } from 'sequelize';
 import ProductsService from '../../../src/services/products.service';
-import ProductModel from '../../../src/database/models/product.model';
+import ProductModel, { ProductInputtableTypes } from '../../../src/database/models/product.model';
 
 const mockProduct = {
   products: [
-    { id: 1, name: 'Marreta do Patolino', price: '100 moedas de ouro', userId: 1 },
-    { id: 2, name: 'Eirenus da Foema Black', price: '200 moedas de ouro', userId: 2 },
+    { id: 1, name: 'Marreta do Chapolin Colorado', price: '1.000.000.000 moedas de ouro', userId: 1 },
+    { id: 2, name: 'Eirenus da Foema Black', price: '200.000 moedas de ouro', userId: 2 },
   ],
 };
 
-describe('ProductsService', function () {
+describe('Products Service Tests', function () {
   beforeEach(function () { sinon.restore(); });
 
   describe('addProduct', function () {
-    it('should return a new product', async function () {
+    it('1. should create and return a new product', async function () {
       // Arrange
-      sinon.stub(ProductsService, 'addProduct').resolves(mockProduct.products[0]);
+      const parameters = mockProduct.products[0] as unknown as Model<Product, ProductInputtableTypes>;
+      sinon.stub(ProductModel, 'create').resolves(parameters);
 
       // Act
-      const product = await ProductsService.addProduct(mockProduct.products[0]);
+      const response = await ProductsService.addProduct(mockProduct.products[0] as unknown as Product);
 
       // Assert
-      expect(product).to.be.deep.equal(mockProduct.products[0]);
+      expect(response.status).to.equal('CREATED');
+      expect(response.type).to.equal('success');
+      expect(response.data).to.equal(parameters);
+    });
+
+    it('2. should return an error when creating a product', async function () {
+      // Arrange
+      const error = new Error('Internal Server Error');
+      sinon.stub(ProductModel, 'create').rejects(error);
+
+      // Act
+      const response = await ProductsService.addProduct(mockProduct.products[0] as unknown as Product);
+
+      // Assert
+      expect(response.type).to.equal('error');
     });
   });
 
   describe('getAllProducts', function () {
-    it('should return all products', async function () {
+    it('1. should return all products', async function () {
       // Arrange
-      const mockProduct1 = sinon.createStubInstance(ProductModel);
-      mockProduct1.get.returns(mockProduct.products[0]);
-
-      const mockProduct2 = sinon.createStubInstance(ProductModel);
-      mockProduct2.get.returns(mockProduct.products[1]);
-
-      sinon.stub(ProductModel, 'findAll').resolves([mockProduct1, mockProduct2]);
+      const parameters = mockProduct.products as unknown as Model<Product, ProductInputtableTypes>[];
+      sinon.stub(ProductModel, 'findAll').resolves(parameters);
 
       // Act
-      const products = await ProductsService.getAllProducts();
+      const response = await ProductsService.getAllProducts();
 
       // Assert
-      expect(products).to.deep.equal(mockProduct.products);
+      expect(response.status).to.equal('SUCCESSFUL');
+      expect(response.type).to.equal('success');
+      expect(response.data).to.equal(parameters);
+    });
+
+    it('2. should return an error when getting all products', async function () {
+      // Arrange
+      const error = new Error('Internal Server Error');
+      sinon.stub(ProductModel, 'findAll').rejects(error);
+
+      // Act
+      const response = await ProductsService.getAllProducts();
+
+      // Assert
+      expect(response.type).to.equal('error');
     });
   });
 });
