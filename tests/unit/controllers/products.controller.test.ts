@@ -12,7 +12,7 @@ const mockProducts = [
   { id: 2, name: 'Eirenus da Foema Black', price: '200 moedas de ouro', userId: 2 },
 ];
 
-describe('Products Controller', function () {
+describe('Products Controller Tests', function () {
   const req = {} as Request;
   const res = {} as Response;
 
@@ -23,45 +23,76 @@ describe('Products Controller', function () {
   });
 
   describe('createProduct', function () {
-    it('should return a new product', async function () {
+    it('1. should create and return a new product', async function () {
       // Arrange
-      req.body = { name: 'Marreta do Patolino', price: '100 moedas de ouro', userId: 1 };
-
-      sinon.stub(productService, 'addProduct').resolves(req.body);
+      req.body = mockProducts[0];
+      const response = {
+        status: 'CREATED',
+        data: mockProducts[0],
+        type: 'success',
+      };
+      sinon.stub(productService, 'addProduct').resolves(response as unknown as any);
 
       // Act
       await createProduct(req, res);
 
       // Assert
       expect(res.status).to.have.been.calledWith(201);
-      expect(res.json).to.have.been.calledWith(req.body);
+      expect(res.json).to.have.been.calledWith(response.data);
     });
 
-    it('should return a 500 status code when an error occurs', async function () {
+    it('2. should return an error when creating a product', async function () {
       // Arrange
-      req.body = {};
-      
-      sinon.stub().rejects();
+      req.body = mockProducts[0];
+      const response = {
+        status: 'INTERNAL_ERROR',
+        message: 'Internal Server Error',
+        type: 'error',
+      };
+      sinon.stub(productService, 'addProduct').resolves(response as unknown as any);
 
       // Act
       await createProduct(req, res);
 
       // Assert
-      expect(res.status).to.have.been.calledWith(500);
-      expect(res.json).to.have.been.calledWith({ message: 'Informe os dados para criar o produto' });
+      expect(res.status).to.have.been.calledWith(401);
+      expect(res.json).to.have.been.calledWith({ message: response.message });
     });
   });
 
   describe('getProducts', function () {
-    it('should return all products', async function () {
-      sinon.stub(productService, 'getAllProducts').resolves(mockProducts);
+    it('1. should return all products', async function () {
+      // Arrange
+      const response = {
+        status: 'SUCCESSFUL',
+        data: mockProducts,
+        type: 'success',
+      };
+      sinon.stub(productService, 'getAllProducts').resolves(response as unknown as any);
 
       // Act
       await getProducts(req, res);
 
       // Assert
       expect(res.status).to.have.been.calledWith(200);
-      expect(res.json).to.have.been.calledWith(mockProducts);
+      expect(res.json).to.have.been.calledWith(response.data);
+    });
+
+    it('2. should return an error when getting all products', async function () {
+      // Arrange
+      const response = {
+        status: 'NOT_FOUND',
+        message: 'Not Found',
+        type: 'error',
+      };
+      sinon.stub(productService, 'getAllProducts').resolves(response as unknown as any);
+
+      // Act
+      await getProducts(req, res);
+
+      // Assert
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: response.message });
     });
   });
 });
