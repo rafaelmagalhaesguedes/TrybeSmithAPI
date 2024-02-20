@@ -7,6 +7,7 @@ type ErrorResponse = {
 
 type SuccessResponse<T> = {
   status: 'SUCCESSFUL' | 'CREATED',
+  message?: string,
   data: T
   type: 'success',
 };

@@ -4,10 +4,16 @@ import { ServiceResponse } from '../types/ServiceResponse';
 import { Product } from '../types/Product';
 
 // add new product
-export const addProduct = async (product: Product)
-: Promise<ServiceResponse<Model<Product, ProductInputtableTypes>>> => {
+export const addProduct = async (product: Product):
+Promise<ServiceResponse<Model<Product, ProductInputtableTypes>>> => {
+  if (!product) return { status: 'INTERNAL_ERROR', message: 'Product is required', type: 'error' };
+
+  if (await ProductModel.findOne({ where: { name: product.name } })) {
+    return { status: 'INTERNAL_ERROR', message: 'Product already exists', type: 'error' };
+  }
+
   try {
-    const newProduct = await ProductModel.create(product) as Model<Product, ProductInputtableTypes>;
+    const newProduct = await ProductModel.create(product);
     return { status: 'CREATED', data: newProduct, type: 'success' };
   } catch (error) {
     const newError = error as Error;
@@ -16,10 +22,10 @@ export const addProduct = async (product: Product)
 };
 
 // get all products
-export const getAllProducts = async ()
-: Promise<ServiceResponse<Model<Product, ProductInputtableTypes>[]>> => {
+export const getAllProducts = async ():
+Promise<ServiceResponse<Model<Product, ProductInputtableTypes>[]>> => {
   try {
-    const products = await ProductModel.findAll() as Model<Product, ProductInputtableTypes>[];
+    const products = await ProductModel.findAll();
     return { status: 'SUCCESSFUL', data: products, type: 'success' };
   } catch (error) {
     const newError = error as Error;
