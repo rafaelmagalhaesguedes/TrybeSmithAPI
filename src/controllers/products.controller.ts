@@ -4,24 +4,24 @@ import statusHTTP from '../utils/httpStatusMap';
 
 // add new product
 export const createProduct = async (req: Request, res: Response) => {
-  const response = await addProduct(req.body);
+  const { type, data, message } = await addProduct(req.body);
 
-  if (response.type !== 'success') {
-    return res.status(statusHTTP('UNAUTHORIZED')).json({ message: response.message });
+  if (type !== 'success') {
+    return res.status(statusHTTP('UNAUTHORIZED')).json({ message });
   }
 
-  return res.status(statusHTTP('CREATED')).json(response.data);
+  return res.status(statusHTTP('CREATED')).json(data);
 };
 
 // get all products
 export const getProducts = async (req: Request, res: Response) => {
-  const response = await getAllProducts();
+  const { type, data, message } = await getAllProducts();
 
-  if (response.type !== 'success') {
-    return res.status(statusHTTP('NOT_FOUND')).json({ message: response.message });
+  if (type !== 'success') {
+    return res.status(statusHTTP('NOT_FOUND')).json({ message });
   }
 
-  return res.status(statusHTTP('SUCCESSFUL')).json(response.data);
+  return res.status(statusHTTP('SUCCESSFUL')).json(data);
 };
 
 export default { createProduct, getAllProducts };
