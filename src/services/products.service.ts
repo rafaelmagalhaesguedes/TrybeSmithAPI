@@ -8,11 +8,7 @@ export const addProduct = async (product: Product)
 : Promise<ServiceResponse<Model<Product, ProductInputtableTypes>>> => {
   try {
     const newProduct = await ProductModel.create(product) as Model<Product, ProductInputtableTypes>;
-    return {
-      status: 'CREATED',
-      data: newProduct as Model<Product, ProductInputtableTypes>,
-      type: 'success',
-    };
+    return { status: 'CREATED', data: newProduct, type: 'success' };
   } catch (error) {
     const newError = error as Error;
     return { status: 'INTERNAL_ERROR', message: newError.message, type: 'error' };
