@@ -16,10 +16,10 @@ Promise<ServiceResponse<{ username: string, productIds: number[] }[]>> => {
 
     const formatData = usersData.map((user) => ({
       username: user.username,
-      productIds: user.productIds?.map((product: any) => product.id),
+      productIds: user.productIds?.map((product: any) => product.id) as number[],
     }));
 
-    return { status: 'SUCCESSFUL', data: formatData as any, type: 'success' };
+    return { status: 'SUCCESSFUL', data: formatData, type: 'success' };
   } catch (error) {
     const newError = error as Error;
     return { status: 'NOT_FOUND', message: newError.message, type: 'error' };
