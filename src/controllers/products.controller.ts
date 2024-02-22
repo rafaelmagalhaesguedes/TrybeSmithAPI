@@ -7,7 +7,7 @@ const createProduct = async (req: Request, res: Response) => {
   const { type, data, message } = await ProductsService.addProduct(req.body);
 
   if (type !== 'success') {
-    return res.status(statusHTTP('UNAUTHORIZED')).json({ message });
+    return res.status(statusHTTP('INVALID_VALUE')).json({ message });
   }
 
   return res.status(statusHTTP('CREATED')).json(data);
