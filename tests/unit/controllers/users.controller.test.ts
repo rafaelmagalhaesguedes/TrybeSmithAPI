@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { Request, Response } from 'express';
 import UserModel from '../../../src/database/models/user.model';
-import UsersController from '../../../src/controllers/users.controller';
+import { UsersController } from '../../../src/controllers';
 
 chai.use(sinonChai);
 
