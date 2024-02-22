@@ -4,6 +4,7 @@ import { Product } from '../../../src/types/Product';
 import { Model } from 'sequelize';
 import ProductModel, { ProductInputtableTypes } from '../../../src/database/models/product.model';
 import { ProductsService } from '../../../src/services';
+import UserModel from '../../../src/database/models/user.model';
 
 const mockProduct = {
   products: [
@@ -20,6 +21,7 @@ describe('Products Service Tests', function () {
       // Arrange
       const parameters = mockProduct.products[0];
       const mockedBuild = ProductModel.build(parameters);
+      sinon.stub(UserModel, 'findOne').resolves({ id: parameters.userId } as unknown as Model);
       sinon.stub(ProductModel, 'create').resolves(mockedBuild);
 
       // Act
