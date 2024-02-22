@@ -1,5 +1,6 @@
 type StatusKey =
-'SUCCESSFUL' | 'CREATED' | 'NOT_FOUND' | 'INVALID_VALUE' | 'UNAUTHORIZED' | 'INTERNAL_ERROR';
+'SUCCESSFUL' | 'CREATED' | 'NOT_FOUND' | 'INVALID_VALUE' | 'UNAUTHORIZED' |
+'INTERNAL_ERROR';
 
 const httpErrorMap: Record<StatusKey, number> = {
   SUCCESSFUL: 200,
