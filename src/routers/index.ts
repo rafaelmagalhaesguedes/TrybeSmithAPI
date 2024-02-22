@@ -1,14 +1,16 @@
 //
 // Barrel Routers
-import express from 'express';
-import { createProduct, getProducts } from '../controllers/products.controller';
-import { getUsers } from '../controllers/users.controller';
+import { Router } from 'express';
+import ProductsRouter from './products.router';
+import UsersRouter from './users.router';
+import LoginRoter from './login.router';
 
-const router = express.Router();
+const routers = Router();
 
-router.post('/products', createProduct);
-router.get('/products', getProducts);
+routers.use('/products', ProductsRouter);
 
-router.get('/users', getUsers);
+routers.use('/users', UsersRouter);
 
-export default router;
+routers.use('/login', LoginRoter);
+
+export default routers;
