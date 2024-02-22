@@ -2,8 +2,8 @@ import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { Request, Response } from 'express';
-import { createProduct, getProducts } from '../../../src/controllers/products.controller';
-import * as productService from '../../../src/services/products.service';
+import { ProductsController } from '../../../src/controllers';
+import { ProductsService } from '../../../src/services';
 
 chai.use(sinonChai);
 
@@ -31,10 +31,10 @@ describe('Products Controller Tests', function () {
         data: mockProducts[0],
         type: 'success',
       };
-      sinon.stub(productService, 'addProduct').resolves(response as unknown as any);
+      sinon.stub(ProductsService, 'addProduct').resolves(response as unknown as any);
 
       // Act
-      await createProduct(req, res);
+      await ProductsController.createProduct(req, res);
 
       // Assert
       expect(res.status).to.have.been.calledWith(201);
@@ -49,10 +49,10 @@ describe('Products Controller Tests', function () {
         message: 'Internal Server Error',
         type: 'error',
       };
-      sinon.stub(productService, 'addProduct').resolves(response as unknown as any);
+      sinon.stub(ProductsService, 'addProduct').resolves(response as unknown as any);
 
       // Act
-      await createProduct(req, res);
+      await ProductsController.createProduct(req, res);
 
       // Assert
       expect(res.status).to.have.been.calledWith(401);
@@ -68,10 +68,10 @@ describe('Products Controller Tests', function () {
         data: mockProducts,
         type: 'success',
       };
-      sinon.stub(productService, 'getAllProducts').resolves(response as unknown as any);
+      sinon.stub(ProductsService, 'getAllProducts').resolves(response as unknown as any);
 
       // Act
-      await getProducts(req, res);
+      await ProductsController.getProducts(req, res);
 
       // Assert
       expect(res.status).to.have.been.calledWith(200);
@@ -85,10 +85,10 @@ describe('Products Controller Tests', function () {
         message: 'Not Found',
         type: 'error',
       };
-      sinon.stub(productService, 'getAllProducts').resolves(response as unknown as any);
+      sinon.stub(ProductsService, 'getAllProducts').resolves(response as unknown as any);
 
       // Act
-      await getProducts(req, res);
+      await ProductsController.getProducts(req, res);
 
       // Assert
       expect(res.status).to.have.been.calledWith(404);
