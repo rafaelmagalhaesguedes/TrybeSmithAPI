@@ -2,7 +2,7 @@ import { ServiceResponse } from '../types/ServiceResponse';
 import UserModel from '../database/models/user.model';
 import ProductModel from '../database/models/product.model';
 
-export const getAllUsers = async ():
+const getAllUsers = async ():
 Promise<ServiceResponse<{ username: string, productIds: number[] }[]>> => {
   try {
     const users = await UserModel.findAll({
