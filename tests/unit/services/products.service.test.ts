@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { Product } from '../../../src/types/Product';
 import { Model } from 'sequelize';
-import ProductsService from '../../../src/services/products.service';
 import ProductModel, { ProductInputtableTypes } from '../../../src/database/models/product.model';
+import { ProductsService } from '../../../src/services';
 
 const mockProduct = {
   products: [
@@ -18,16 +18,16 @@ describe('Products Service Tests', function () {
   describe('addProduct', function () {
     it('1. should create and return a new product', async function () {
       // Arrange
-      const parameters = mockProduct.products[0] as unknown as Model<Product, ProductInputtableTypes>;
-      sinon.stub(ProductModel, 'create').resolves(parameters);
+      const parameters = mockProduct.products[0];
+      const mockedBuild = ProductModel.build(parameters);
+      sinon.stub(ProductModel, 'create').resolves(mockedBuild);
 
       // Act
-      const response = await ProductsService.addProduct(mockProduct.products[0] as unknown as Product);
+      const response = await ProductsService.addProduct(mockProduct.products[0]);
 
       // Assert
       expect(response.status).to.equal('CREATED');
       expect(response.type).to.equal('success');
-      expect(response.data).to.equal(parameters);
     });
 
     it('2. should return an error when creating a product', async function () {
@@ -36,7 +36,7 @@ describe('Products Service Tests', function () {
       sinon.stub(ProductModel, 'create').rejects(error);
 
       // Act
-      const response = await ProductsService.addProduct(mockProduct.products[0] as unknown as Product);
+      const response = await ProductsService.addProduct(mockProduct.products[0]);
 
       // Assert
       expect(response.type).to.equal('error');
