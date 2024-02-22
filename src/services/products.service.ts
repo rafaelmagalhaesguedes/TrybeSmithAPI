@@ -6,12 +6,6 @@ import { Product } from '../types/Product';
 // add new product
 export const addProduct = async (product: Product):
 Promise<ServiceResponse<Model<Product, ProductInputtableTypes>>> => {
-  if (!product) return { status: 'INTERNAL_ERROR', message: 'Product is required', type: 'error' };
-
-  if (await ProductModel.findOne({ where: { name: product.name } })) {
-    return { status: 'INTERNAL_ERROR', message: 'Product already exists', type: 'error' };
-  }
-
   try {
     const newProduct = await ProductModel.create(product);
     return { status: 'CREATED', data: newProduct, type: 'success' };
