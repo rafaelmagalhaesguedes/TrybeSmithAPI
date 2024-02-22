@@ -4,6 +4,7 @@ import sinonChai from 'sinon-chai';
 import { Request, Response } from 'express';
 import { ProductsController } from '../../../src/controllers';
 import { ProductsService } from '../../../src/services';
+import statusHTTP from '../../../src/utils/httpStatusMap';
 
 chai.use(sinonChai);
 
@@ -37,7 +38,7 @@ describe('Products Controller Tests', function () {
       await ProductsController.createProduct(req, res);
 
       // Assert
-      expect(res.status).to.have.been.calledWith(201);
+      expect(res.status).to.have.been.calledWith(statusHTTP('CREATED'));
       expect(res.json).to.have.been.calledWith(response.data);
     });
 
@@ -45,7 +46,7 @@ describe('Products Controller Tests', function () {
       // Arrange
       req.body = mockProducts[0];
       const response = {
-        status: 'INTERNAL_ERROR',
+        status: 'INVALID_VALUE',
         message: 'Internal Server Error',
         type: 'error',
       };
@@ -55,7 +56,7 @@ describe('Products Controller Tests', function () {
       await ProductsController.createProduct(req, res);
 
       // Assert
-      expect(res.status).to.have.been.calledWith(401);
+      expect(res.status).to.have.been.calledWith(statusHTTP('INVALID_VALUE'));
       expect(res.json).to.have.been.calledWith({ message: response.message });
     });
   });
