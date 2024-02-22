@@ -1,6 +1,6 @@
 type StatusKey =
 'SUCCESSFUL' | 'CREATED' | 'NOT_FOUND' | 'INVALID_VALUE' | 'UNAUTHORIZED' |
-'INTERNAL_ERROR';
+'INTERNAL_ERROR' | 'CONFLICT';
 
 const httpErrorMap: Record<StatusKey, number> = {
   SUCCESSFUL: 200,
@@ -9,6 +9,8 @@ const httpErrorMap: Record<StatusKey, number> = {
   INVALID_VALUE: 422,
   UNAUTHORIZED: 401,
   INTERNAL_ERROR: 500,
+  CONFLICT: 409,
+  
 };
 
 const statusHTTP = (status: StatusKey): number => httpErrorMap[status] || 500;
