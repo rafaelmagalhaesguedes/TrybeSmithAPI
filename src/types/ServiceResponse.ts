@@ -1,5 +1,5 @@
 type ErrorResponse = {
-  status: 'INTERNAL_ERROR' | 'NOT_FOUND',
+  status: 'INVALID_VALUE' | 'INTERNAL_ERROR' | 'NOT_FOUND' | 'UNAUTHORIZED' | 'BAD_REQUEST',
   message: string,
   type: 'error',
   data?: null,
